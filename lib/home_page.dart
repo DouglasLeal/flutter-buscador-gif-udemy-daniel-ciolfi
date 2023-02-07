@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
             fontSize: 24,
           ),
         ),
+        Divider(),
         Expanded(
           child: FutureBuilder(
             future: GifService.get(),
@@ -74,7 +75,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _gifGrid(context, snapshot){
-
+  _gifGrid(context, snapshot) {
+    return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemCount: snapshot.data["data"].length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Image.network(
+              snapshot.data["data"][index]["images"]["downsized"]["url"],
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+          );
+        });
   }
 }
