@@ -1,5 +1,5 @@
 import 'package:buscador_gif/Services/GifService.dart';
-import 'package:buscador_gif/home_page.dart';
+import 'package:buscador_gif/Pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

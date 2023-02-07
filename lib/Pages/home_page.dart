@@ -1,3 +1,4 @@
+import 'package:buscador_gif/Pages/gif_page.dart';
 import 'package:buscador_gif/Services/GifService.dart';
 import 'package:flutter/material.dart';
 
@@ -89,6 +90,9 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           if (index < snapshot.data["data"].length) {
             return GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => GifPage(snapshot.data["data"][index])));
+              },
               child: Image.network(
                 snapshot.data["data"][index]["images"]["downsized"]["url"],
                 height: 300,
