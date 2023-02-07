@@ -9,10 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  String? _search = null;
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +34,28 @@ class _HomePageState extends State<HomePage> {
       margin: EdgeInsets.all(16),
       child: Column(children: [
         TextField(
-          decoration: InputDecoration(
+          onSubmitted: (text) {
+            GifService.offSet = 0;
+            setState(() {
+              _search = text;
+            });
+          },
+          decoration: const InputDecoration(
             labelText: "Procurar...",
             labelStyle: TextStyle(
               color: Colors.white,
             ),
             border: OutlineInputBorder(),
           ),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 24,
           ),
         ),
-        Divider(),
+        const Divider(),
         Expanded(
           child: FutureBuilder(
-            future: GifService.get(),
+            future: GifService.get(search: _search),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
@@ -82,15 +85,41 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
-        itemCount: snapshot.data["data"].length,
+        itemCount: snapshot.data["data"].length + 1,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Image.network(
-              snapshot.data["data"][index]["images"]["downsized"]["url"],
-              height: 300,
-              fit: BoxFit.cover,
-            ),
-          );
+          if (index < snapshot.data["data"].length) {
+            return GestureDetector(
+              child: Image.network(
+                snapshot.data["data"][index]["images"]["downsized"]["url"],
+                height: 300,
+                fit: BoxFit.cover,
+              ),
+            );
+          } else {
+            return GestureDetector(
+              onTap: (){
+                GifService.offSet += 19;
+
+                setState(() {
+                  GifService.get(search: _search);
+                });
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 70,
+                  ),
+                  Text(
+                    "Carregar mais...",
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ],
+              ),
+            );
+          }
         });
   }
 }
