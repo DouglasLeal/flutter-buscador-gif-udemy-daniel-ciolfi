@@ -12,8 +12,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    GifService.get().then((value) => print(value));
   }
 
   @override
@@ -36,8 +34,8 @@ class _HomePageState extends State<HomePage> {
 
   _body() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      child: Column(children: const [
+      margin: EdgeInsets.all(16),
+      child: Column(children: [
         TextField(
           decoration: InputDecoration(
             labelText: "Procurar...",
@@ -48,10 +46,35 @@ class _HomePageState extends State<HomePage> {
           ),
           style: TextStyle(
             color: Colors.white,
-            fontSize: 32,
+            fontSize: 24,
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future: GifService.get(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return Container(
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 5,
+                    ),
+                  );
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  return _gifGrid(context, snapshot);
+              }
+            },
           ),
         ),
       ]),
     );
+  }
+
+  _gifGrid(context, snapshot){
+
   }
 }
