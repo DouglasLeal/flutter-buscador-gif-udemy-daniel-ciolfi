@@ -1,6 +1,7 @@
 import 'package:buscador_gif/Pages/gif_page.dart';
 import 'package:buscador_gif/Services/GifService.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -93,6 +94,7 @@ class _HomePageState extends State<HomePage> {
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => GifPage(snapshot.data["data"][index])));
               },
+              onLongPress: (){ Share.share(snapshot.data["data"][index]["images"]["downsized"]["url"]); },
               child: Image.network(
                 snapshot.data["data"][index]["images"]["downsized"]["url"],
                 height: 300,
